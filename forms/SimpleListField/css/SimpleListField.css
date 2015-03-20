@@ -1,0 +1,50 @@
+.simplelistfield-container{
+	border: 1px solid #CCC !important;
+	background: #FFF;
+	padding: 0 !important;
+}
+.dlf-heading{
+	background: #b0bec7;
+    margin: 0 !important;
+    padding: 10px;
+}
+.dlf-heading .dlf-toggle{
+	font-size: 11px;
+	font-style: italic;
+}
+.dlf-switch-state{
+	float: right;
+	font-size: 12px;
+	font-weight: normal;
+}
+.dlf-container{
+	margin: 0 8px;
+}
+.dlf-fiedlist{
+	border: 1px solid #CCC;
+	position: relative;
+	border-radius: 4px;
+	margin-bottom: 10px;
+	background: #E6EAED;
+}
+.dlf-fieldlist-panel{
+	background: #b0bec7;
+    padding: 3px;
+    position: relative;
+}
+.dlf-fieldlist-panel > button{
+	float: right;
+}
+.dlf-sortable-handle{
+	background: url("move-16.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    position: absolute;
+    display: block;
+    height: 16px;
+    left: 8px;
+    top: 8px;
+    width: 16px;
+	cursor: move;
+}
+.dlf-fieldlist-content{
+	padding: 0 8px;
+}
