@@ -19,8 +19,18 @@ jQuery.entwine("simplelist", function($) {
 			$('#'+ holderID +'_wrapper').sortable( {
 				items: "> .dlf-fiedlist",
 				handle: '.dlf-sortable-handle',
-				update: function(e, ui){ SimpleListField.saveToHolder(holderID) } }
-			);
+				update: function(e, ui){ SimpleListField.saveToHolder(holderID) },
+				start: function(e, ui){
+					$(this).find('textarea.slf-htmleditor').each(function(){
+						tinyMCE.execCommand( 'mceRemoveControl', false, $(this).attr('id') );
+					});
+				},
+				stop: function(e,ui) {
+					$(this).find('textarea.slf-htmleditor').each(function(){
+						tinyMCE.execCommand( 'mceAddControl', true, $(this).attr('id') );
+					});
+				}
+			} );
 			
 			// set list items
 			if ( !jQuery.isEmptyObject(items) )
@@ -73,6 +83,54 @@ var SimpleListField = {
 								data-holder-id="'+ holderID +'" data-item-id="'+ itemID +'" cols="20" rows="6">'+ value +'</textarea>\
 						</div>\
 					</div>';
+					
+					break;
+					
+				case 'htmleditor':
+					html += '<div class="field slf-htmleditor simplelistfield-input dlf-input-wrapper">\
+						<label class="left" for="'+ attributes.id +'">'+ field.label +'</label>\
+						<div class="middleColumn">\
+							<textarea type="text" class="slf-htmleditor dlf-item-input"\
+								id="'+ attributes.id +'" name="'+ attributes.name +'"\
+								data-holder-id="'+ holderID +'" data-item-id="'+ itemID +'" cols="20" rows="6">'+ value +'</textarea>\
+						</div>\
+					</div>';
+					
+					// setup tinymce
+					setTimeout(function(){
+						var tinymceMCE_cfg = jQuery.extend(jQuery.extend(true, {}, ssTinyMceConfig),{
+							width : "650",
+							height: "300",
+							mode : "exact",
+							elements : attributes.id,
+							setup: function(ed){
+								ed.onInit.add(function(ed){
+									// on focus
+									jQuery(ed.getDoc()).contents().find('body').focus(function(){});
+									
+									// on blur
+									jQuery(ed.getDoc()).contents().find('body').blur(function(){
+										jQuery('#' + attributes.id).html(ed.getContent());
+										
+										eval(attributes.onblur);
+									});
+								});
+							}
+						});
+						
+						jQuery.each(tinymceMCE_cfg, function(i, v){
+							if ( i.indexOf('theme_advanced_buttons') != -1 ) {
+								tinymceMCE_cfg[i] = v.replace(/sslink/gi, "link");
+								tinymceMCE_cfg[i] = tinymceMCE_cfg[i].replace(/ssmedia/gi, "media,image");
+							}
+							
+							if (i == 'plugins') {
+								tinymceMCE_cfg[i] = v.replace(/-ssbuttons/gi, "advhr,advimage,advlink,media");
+							}
+						});
+						
+						tinyMCE.init(tinymceMCE_cfg);
+					}, 300);
 					
 					break;
 				

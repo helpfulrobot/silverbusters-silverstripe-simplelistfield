@@ -14,6 +14,17 @@ class SimpleListField extends TextareaField {
 	 *
 	 */
 	public function Field($properties = array()) {
+		// Load TinyMCE if needed
+		if( isset(self::$scenarios[$this->scenario]['fields']) ){
+			$fields = self::$scenarios[$this->scenario]['fields'];
+			
+			foreach($fields as $field){
+				if(isset($field['type']) && $field['type'] == 'htmleditor'){
+					HtmlEditorField::include_js(); break;
+				}
+			}
+		}
+		
 		// Assets
 		Requirements::css(SimpleListFieldDir . '/forms/SimpleListField/css/SimpleListField.css');
 		Requirements::javascript(SimpleListFieldDir . '/forms/SimpleListField/js/jquery.serializejson.min.js');
